@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""ste_check: a small heuristic linter for STE-style (ASD-STE100-inspired) English.
+"""ste_check: a small heuristic linter for AI tells and STE-style (ASD-STE100-inspired) English.
 
-It finds places to look at. It does not prove compliance with ASD-STE100.
+Part of the humanizer-ste80 skill. It finds places to look at.
+It does not prove compliance with ASD-STE100 and it is not an AI detector.
 No dependencies. Python 3.8+.
 
 Usage:
@@ -45,7 +46,12 @@ SWAPS = {
     "pivotal": "important", "landscape": "field, area", "realm": "field, area",
     "showcase": "show", "streamline": "simplify", "empower": "let, help",
     "harness": "use", "foster": "help", "underscore": "show",
-    "game-changer": "(delete)", "tapestry": "(delete)",
+    "game-changer": "(delete)", "tapestry": "(delete)", "testament": "(delete) or say what it shows",
+    "elevate": "improve", "unlock": "let, give", "intricate": "complex", "meticulous": "careful",
+    "vibrant": "(delete)", "enhance": "improve", "groundbreaking": "(fact or delete)",
+    "cutting-edge": "(fact or delete)", "world-class": "(fact or delete)", "best-in-class": "(fact or delete)",
+    "renowned": "(fact or delete)", "stunning": "(delete)", "breathtaking": "(delete)",
+    "serves as": "is", "stands as": "is", "boasts": "has",
 }
 
 STRICT_ONLY_SWAPS = {
@@ -57,6 +63,24 @@ STRICT_ONLY_SWAPS = {
     "avoid": "prevent", "follow": "obey", "inspect": "examine",
     "e.g.": "for example", "i.e.": "that is", "etc.": "and other",
 }
+
+TELLS = [
+    (r"\b(?:it'?s|it is|this is|that'?s|is)\s+not\s+(?:just|only|merely|simply|about)\b", "not-x-but-y", "'not just X, but Y' framing: state the point"),
+    (r"\bnot\s+(?:just|only|merely)\b[^.]{0,80}\bbut\b", "not-x-but-y", "'not just X but Y' framing: state the point"),
+    (r"\bisn'?t\s+(?:just\s+)?about\b", "not-x-but-y", "'this isn't about X' framing: state the point"),
+    (r"^(?:great question|certainly|of course|sure|absolutely)[!,.]", "chatbot", "chatbot opener: delete"),
+    (r"\bi hope this helps\b|\blet me know if\b|\bwould you like me to\b|\bfeel free to\b|\bhappy to help\b", "chatbot", "chatbot closer: delete"),
+    (r"\blet'?s (?:dive|delve|break (?:this|it) down|explore|unpack)\b|\bhere'?s the thing\b|\bwithout further ado\b", "run-up", "run-up before the point: start with the point"),
+    (r"\bat its core\b|\bthe real question is\b|\bfundamentally\b|\bat the end of the day\b", "fake-depth", "fake depth: say the plain claim"),
+    (r"\blet that sink in\b|\band that changes everything\b|\bthat'?s the real (?:win|story)\b|\bread that again\b", "closer", "dramatic closer: delete"),
+    (r"\bdon'?t get me wrong\b|\bto be clear\b|\bone might be tempted\b", "strawman", "arguing with nobody: remove"),
+    (r"\bas of my (?:last|latest) (?:update|training)\b|\bbased on (?:the )?available information\b", "knowledge-hedge", "knowledge-limit hedge: delete"),
+    (r"\bin this (?:guide|article|section|post),? (?:we|i)(?:'ll| will)\b", "meta", "writing about the text: give the content"),
+    (r"\b(?:could|may|might) (?:potentially|possibly|arguably)\b", "stacked-hedge", "stacked hedge: keep one hedge"),
+    (r"\b(?:experts|studies|many people|observers) (?:say|agree|show|believe|suggest)\b", "vague-authority", "vague authority: name the source or delete"),
+    (r",\s+(?:highlighting|underscoring|emphasizing|ensuring|reflecting|showcasing|fostering|cultivating|contributing to)\b", "ing-rider", "shallow '-ing' rider: delete or make it a sentence"),
+    (r"\b(?:plays|play|played) a (?:pivotal|crucial|key|vital) role\b|\bmarks? a (?:significant|major) milestone\b|\bthe future looks bright\b", "inflation", "inflated significance: say what happened"),
+]
 
 PHRASAL = [
     "set up", "find out", "look into", "look at", "fill in", "fill out",
@@ -170,6 +194,7 @@ def is_imperative(sentence: str) -> bool:
 def check(text: str, strict: bool) -> list[Finding]:
     f: list[Finding] = []
     lines = strip_markdown(text)
+    raw_by_no = dict(enumerate(text.splitlines(), 1))
 
     for start, para in paragraphs(lines):
         sents = sentences(para)
@@ -207,6 +232,11 @@ def check(text: str, strict: bool) -> list[Finding]:
         for p in PHRASAL:
             if re.search(rf"\b{re.escape(p)}\b", low):
                 f.append(Finding(no, "phrasal-verb", f"phrasal verb '{p}'", line.strip()[:100]))
+        for pat, rule, msg in TELLS:
+            if re.search(pat, line, re.I):
+                f.append(Finding(no, rule, msg, line.strip()[:100]))
+        if re.search(r"[“”‘’]", raw_by_no.get(no, "")):
+            f.append(Finding(no, "curly-quotes", "curly quotes: use straight quotes in Markdown and code", line.strip()[:100]))
         swaps = dict(SWAPS)
         if strict:
             swaps.update(STRICT_ONLY_SWAPS)
@@ -234,7 +264,7 @@ def summary(text: str) -> dict:
 
 
 def main(argv: list[str]) -> int:
-    ap = argparse.ArgumentParser(description="Heuristic STE-style linter (not a compliance checker).")
+    ap = argparse.ArgumentParser(description="Heuristic linter for AI tells and STE-style English (not a compliance checker, not an AI detector).")
     ap.add_argument("files", nargs="+", help="files to check, or - for stdin")
     ap.add_argument("--strict", action="store_true", help="strict mode: exact limits, more word rules")
     ap.add_argument("--json", action="store_true", help="output JSON")

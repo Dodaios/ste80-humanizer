@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0
+
+- Renamed from `ste80` to `humanizer-ste80`. The skill is now a general humanizer that uses STE80 as its method.
+- New Part 1: 23 AI tells in five groups (staging, rhythm, inflation, formatting, chat residue), inspired by Wikipedia's "Signs of AI writing" and blader/humanizer.
+- Part 2: the 23 STE80 structure rules, now in compact form. The full rules with before and after examples moved to `references/ste80-rules.md`.
+- New modes: Humanize (default), Light, Strict STE.
+- New sections: Voice (match a writing sample), "Human quirks" to keep, contradiction flag in the fidelity rules.
+- `ste_check.py` now also flags AI tells: not-X-but-Y, chatbot openers and closers, run-ups, fake depth, stacked hedges, vague authority, "-ing" riders, inflated significance and curly quotes.
+- New eval case: `humanize-linkedin-post`.
+
 ## 1.0.0
 
 - First release.

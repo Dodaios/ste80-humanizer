@@ -1,13 +1,23 @@
 {
-  "name": "ste80",
-  "description": "Write or rewrite text \"80% of the way to ASD-STE100\", the controlled English that aerospace maintenance manuals use.",
-  "version": "1.0.0",
+  "name": "humanizer-ste80",
+  "description": "Rewrite AI-sounding text so it reads like a clear, careful human wrote it, using the \"80% of the way to ASD-STE100\" method that Andrej Karpathy shared.",
+  "version": "2.0.0",
   "author": {
     "name": "Dodaios",
     "url": "https://github.com/Dodaios"
   },
-  "homepage": "https://github.com/Dodaios/ste80",
-  "repository": "https://github.com/Dodaios/ste80",
+  "homepage": "https://github.com/Dodaios/humanizer-ste80",
+  "repository": "https://github.com/Dodaios/humanizer-ste80",
   "license": "MIT",
-  "keywords": ["asd-ste100", "simplified-technical-english", "plain-language", "writing"]
+  "keywords": [
+    "humanizer",
+    "ai-writing",
+    "humanize-ai-text",
+    "asd-ste100",
+    "simplified-technical-english",
+    "plain-language",
+    "writing",
+    "karpathy",
+    "agent-skills"
+  ]
 }
