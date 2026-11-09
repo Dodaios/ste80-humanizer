@@ -37,6 +37,10 @@ On 2 October 2026, [Andrej Karpathy posted](https://x.com/karpathy/status/210581
 
 The post then goes up a ladder: diagrams, then HTML pages, then explainer videos. His conclusion is that our work moves "up the abstractions into oversight and understanding". Clear output is the bottleneck, and writing is the first step.
 
+[![Simplified Technical English: overview. Document structure, anatomy of STE sentences, verb forms, dictionary entries, writing rule limits and history.](assets/ste100-overview.png)](assets/ste100-overview.png)
+
+*The STE overview graphic from [Karpathy's post](https://x.com/karpathy/status/2105819303471976479). Click to enlarge. Note: a later fact check found errors in the dictionary panel (D). In ASD-STE100 Issue 9, "approximately" is approved, "TEST" is approved only as a noun (not as a verb), and there is no entry for "in order to". This skill follows Issue 9.*
+
 **ASD-STE100** (Simplified Technical English) is from the 1980s aerospace industry. It was made for mechanics whose first language is not English, because a misread step on an aircraft can kill. Its rules:
 
 - 20 words per instruction and 25 per description
