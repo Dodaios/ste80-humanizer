@@ -80,6 +80,9 @@ TELLS = [
     (r"\b(?:experts|studies|many people|observers) (?:say|agree|show|believe|suggest)\b", "vague-authority", "vague authority: name the source or delete"),
     (r",\s+(?:highlighting|underscoring|emphasizing|ensuring|reflecting|showcasing|fostering|cultivating|contributing to)\b", "ing-rider", "shallow '-ing' rider: delete or make it a sentence"),
     (r"\b(?:plays|play|played) a (?:pivotal|crucial|key|vital) role\b|\bmarks? a (?:significant|major) milestone\b|\bthe future looks bright\b", "inflation", "inflated significance: say what happened"),
+    (r"\b(?:is|are|was|were) associated with\b|\b(?:in connection with|linked to|tied to)\b", "vague-association", "vague connection: name the relation (founded, caused, part of)"),
+    (r"\b(?:is|are|was|were|be)(?:\s+\w+ly)?\s+(?:high-quality|well-known|well-documented|long-term|real-time|well-tested|client-facing)\b", "hyphen-pair", "drop the hyphen after the noun ('is well documented')"),
+    (r"^(?:that'?s|this is) (?:the real|why it|what) ", "closer", "possible one-line closer: cut it if it repeats the point"),
 ]
 
 PHRASAL = [
@@ -99,6 +102,15 @@ ING_NOUN_OK = {
     "rendering", "hosting", "tooling", "training", "pricing", "billing",
     "encoding", "streaming", "scheduling", "parsing", "linting", "formatting",
     "being", "missing", "existing", "incoming", "outgoing", "pending",
+}
+
+NOT_PARTICIPLE = {
+    "different", "present", "absent", "current", "recent", "frequent", "silent",
+    "independent", "efficient", "sufficient", "apparent", "consistent", "important",
+    "relevant", "urgent", "evident", "excellent", "competent", "dependent", "transparent",
+    "open", "even", "often", "golden", "hidden", "sudden", "wooden", "own", "down",
+    "shown", "known", "unknown", "brown", "grown", "drawn", "built", "content",
+    "intent", "event", "agent", "client", "point", "front", "want", "difficult",
 }
 
 AUX = r"(?:am|is|are|was|were|be|been|being)"
@@ -217,6 +229,8 @@ def check(text: str, strict: bool) -> list[Finding]:
         if "—" in line or " -- " in line:
             f.append(Finding(no, "dash", "em dash as sentence glue: use a period or colon", line.strip()[:100]))
         for m in PASSIVE_RE.finditer(line):
+            if m.group(1).lower() in NOT_PARTICIPLE:
+                continue
             f.append(Finding(no, "passive", f"possible passive voice: '{m.group(0)}'", line.strip()[:100]))
         for m in MODAL_PASSIVE_RE.finditer(line):
             f.append(Finding(no, "modal-passive", f"modal + passive: '{m.group(0)}'", line.strip()[:100]))

@@ -1,17 +1,28 @@
 # STE80 rules in detail
 
-The sentence, verb, word, structure and punctuation rules of the STE80 method, with before and after examples. SKILL.md has a one-line summary of each rule. Read this file when you rewrite a long text, when a rule in the summary is unclear, or before strict mode.
+More examples for Pass 2 of SKILL.md. Read this file when you rewrite a long text, when an S-rule is unclear, or before strict mode.
 
 These rules paraphrase and simplify ASD-STE100 Issue 9. They are not the official text.
 
-## Contents
+The long-form numbers here (1 to 23) are finer than the S-rules in SKILL.md. They map like this:
 
-- A. Sentences (rules 1 to 6)
-- B. Verbs (rules 7 to 12)
-- C. Words (rules 13 to 17)
-- D. Paragraphs and structure (rules 18 to 21)
-- E. Punctuation (rules 22 and 23)
-- F. What 80% mode relaxes
+| SKILL.md | This file |
+|---|---|
+| S1 One idea per sentence | 1 |
+| S2 Short sentences | 2 |
+| S3 Condition first | 3 |
+| S4 Do not drop words | 4 |
+| S5 Lists | 5, 6 |
+| S6 Active voice | 7 |
+| S7 Simple tenses | 8 |
+| S8 Verbs, not nouns, no "-ing" chains | 9, 10 |
+| S9 Honest modals | 11 |
+| S10 Plain words, one meaning each | 12, 13, 15 |
+| S11 One term per thing | 14, 17 |
+| S12 No noun stacks | 16 |
+| S13 One topic per paragraph | 18, 19 |
+| S14 Procedure apart, warnings first | 20, 21 |
+| S15 Simple punctuation | 22, 23 |
 
 ## A. Sentences
 

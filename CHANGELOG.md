@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.0
+
+- Rewrote SKILL.md from top to bottom for readability.
+- New section "How to read this skill": two passes, §1 to §26 for AI tells, S1 to S15 for structure, the same fields in every entry.
+- New section "The method": Karpathy's full tip, the ladder from writing to diagrams, HTML and video, why STE works on LLMs, a table of what 100% and 80% mean, and a note on errors in the graphic that came with his post.
+- Pass 1 now covers all 26 patterns of blader/humanizer in the same order (adds hyphenated pairs, vague association, repeated heading, borrowed authority with prestige lists, and others), each with Watch for, Problem, and new Before/After examples. The MIT notice of blader/humanizer is in LICENSE.
+- Pass 2 has 15 S-rules, each with 80% and Strict levels and examples.
+- New worked example that shows the text after Pass 1 and after Pass 2.
+- Return formats now include file mode, embedded mode and review mode.
+
 ## 2.0.0
 
 - Renamed from `ste80` to `humanizer-ste80`. The skill is now a general humanizer that uses STE80 as its method.
