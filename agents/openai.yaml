@@ -1,0 +1,4 @@
+interface:
+  display_name: "STE80"
+  short_description: "Write 80% of the way to ASD-STE100 Simplified Technical English"
+  default_prompt: "Use $ste80 to rewrite this text 80% of the way to ASD-STE100."

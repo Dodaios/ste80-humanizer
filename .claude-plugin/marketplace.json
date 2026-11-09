@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "ste80",
+  "owner": {
+    "name": "Dodaios",
+    "url": "https://github.com/Dodaios"
+  },
+  "description": "Agent skill that writes 80% of the way to ASD-STE100 Simplified Technical English.",
+  "plugins": [
+    {
+      "name": "ste80",
+      "source": "./",
+      "description": "Write or rewrite text \"80% of the way to ASD-STE100\", the controlled English that aerospace maintenance manuals use.",
+      "license": "MIT",
+      "keywords": ["asd-ste100", "simplified-technical-english", "plain-language", "writing"]
+    }
+  ]
+}
