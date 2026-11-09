@@ -1,8 +1,8 @@
-# Humanizer STE80
+# STE80 Humanizer
 
-[![skills.sh installs](https://skills.sh/b/Dodaios/humanizer-ste80)](https://skills.sh/Dodaios/humanizer-ste80) [![validate](https://github.com/Dodaios/humanizer-ste80/actions/workflows/validate.yml/badge.svg)](https://github.com/Dodaios/humanizer-ste80/actions/workflows/validate.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![skills.sh installs](https://skills.sh/b/Dodaios/ste80-humanizer)](https://skills.sh/Dodaios/ste80-humanizer) [![validate](https://github.com/Dodaios/ste80-humanizer/actions/workflows/validate.yml/badge.svg)](https://github.com/Dodaios/ste80-humanizer/actions/workflows/validate.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Humanizer STE80 makes AI-written text read like a careful person wrote it, without changing what it says. It combines two methods:
+STE80 Humanizer makes AI-written text read like a careful person wrote it, without changing what it says. It combines two methods:
 
 1. **The humanizer method.** Remove the 26 tells from Wikipedia's [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), in the catalog of [blader/humanizer](https://github.com/blader/humanizer).
 2. **Karpathy's STE80 method.** Rebuild the sentences "80% of the way to ASD-STE100", the controlled English of aircraft maintenance manuals.
@@ -71,21 +71,21 @@ Every entry has the same fields: **Watch for**, **Problem**, **Before** and **Af
 
 ## Installation
 
-Once installed, the skill answers to `/humanizer-ste80`. It also starts by itself when you ask to humanize, simplify or de-AI a text, or ask for STE.
+Once installed, the skill answers to `/ste80-humanizer`. It also starts by itself when you ask to humanize, simplify or de-AI a text, or ask for STE.
 
 ### Any agent (skills.sh)
 
 ```bash
-npx skills add Dodaios/humanizer-ste80
+npx skills add Dodaios/ste80-humanizer
 ```
 
 Global install for one agent, or for all of them:
 
 ```bash
-npx skills add Dodaios/humanizer-ste80 --global --agent claude-code
-npx skills add Dodaios/humanizer-ste80 --global --agent codex
-npx skills add Dodaios/humanizer-ste80 --global --agent cursor
-npx skills add Dodaios/humanizer-ste80 --global --agent '*'
+npx skills add Dodaios/ste80-humanizer --global --agent claude-code
+npx skills add Dodaios/ste80-humanizer --global --agent codex
+npx skills add Dodaios/ste80-humanizer --global --agent cursor
+npx skills add Dodaios/ste80-humanizer --global --agent '*'
 ```
 
 Without `--global`, the skill goes into the current project only. The [skills CLI](https://github.com/vercel-labs/skills) from Vercel works with Claude Code, Codex, Cursor, OpenCode and many more agents.
@@ -93,8 +93,8 @@ Without `--global`, the skill goes into the current project only. The [skills CL
 ### Claude Code plugin
 
 ```
-/plugin marketplace add Dodaios/humanizer-ste80
-/plugin install humanizer-ste80@humanizer-ste80
+/plugin marketplace add Dodaios/ste80-humanizer
+/plugin install ste80-humanizer@ste80-humanizer
 ```
 
 ### Claude.ai and Claude Desktop
@@ -104,7 +104,7 @@ Download this repo as a ZIP (Code → Download ZIP). Upload it in Settings → C
 ## Usage
 
 ```
-/humanizer-ste80
+/ste80-humanizer
 <paste text>
 ```
 

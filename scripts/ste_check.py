@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ste_check: a small heuristic linter for AI tells and STE-style (ASD-STE100-inspired) English.
 
-Part of the humanizer-ste80 skill. It finds places to look at.
+Part of the ste80-humanizer skill. It finds places to look at.
 It does not prove compliance with ASD-STE100 and it is not an AI detector.
 No dependencies. Python 3.8+.
 

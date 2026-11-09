@@ -1,13 +1,13 @@
 {
-  "name": "humanizer-ste80",
+  "name": "ste80-humanizer",
   "description": "Rewrite AI-sounding text so it reads like a clear, careful human wrote it, using the \"80% of the way to ASD-STE100\" method that Andrej Karpathy shared.",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "author": {
     "name": "Dodaios",
     "url": "https://github.com/Dodaios"
   },
-  "homepage": "https://github.com/Dodaios/humanizer-ste80",
-  "repository": "https://github.com/Dodaios/humanizer-ste80",
+  "homepage": "https://github.com/Dodaios/ste80-humanizer",
+  "repository": "https://github.com/Dodaios/ste80-humanizer",
   "license": "MIT",
   "keywords": [
     "humanizer",

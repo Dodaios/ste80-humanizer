@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0
+
+- Renamed from `humanizer-ste80` to `ste80-humanizer` ("STE80 Humanizer"). Install with `npx skills add Dodaios/ste80-humanizer`. The slash command is now `/ste80-humanizer`.
+
 ## 3.0.0
 
 - Rewrote SKILL.md from top to bottom for readability.

@@ -1,6 +1,6 @@
 # Guide for agents
 
-This repo is one agent skill, `humanizer-ste80`. `SKILL.md` at the root is the skill. Pass 1 lists the 26 AI tells (§1 to §26, same order as blader/humanizer). Pass 2 lists the STE80 structure rules (S1 to S15). Follow these rules when you change it.
+This repo is one agent skill, `ste80-humanizer`. `SKILL.md` at the root is the skill. Pass 1 lists the 26 AI tells (§1 to §26, same order as blader/humanizer). Pass 2 lists the STE80 structure rules (S1 to S15). Follow these rules when you change it.
 
 - **Write in the style the skill teaches.** Short sentences, active voice, simple tenses, one term per thing.
 - **Keep the version in sync** in four places: `SKILL.md` (`metadata.version`), the first heading in `CHANGELOG.md`, `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`.

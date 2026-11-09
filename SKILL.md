@@ -1,5 +1,5 @@
 ---
-name: humanizer-ste80
+name: ste80-humanizer
 description: |
   Rewrite AI-sounding text so it reads like a clear, careful person wrote it, using the
   "80% of the way to ASD-STE100" method that Andrej Karpathy shared. Pass 1 removes the
@@ -11,11 +11,11 @@ description: |
   ASD-STE100 or STE, or wants docs, READMEs, emails, posts or answers tightened.
 license: MIT
 metadata:
-  version: "3.0.0"
+  version: "3.1.0"
   author: "Dodaios"
 ---
 
-# Humanizer STE80
+# STE80 Humanizer
 
 Rewrite AI-sounding text so it reads like a careful person wrote it, and so the reader gets it on the first pass.
 Keep what it says. Do not make anything up.
