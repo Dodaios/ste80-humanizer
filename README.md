@@ -71,7 +71,7 @@ Karpathy's tip is about readability. It does not remove chatbot phrases, so Pass
 - **§1 to §26:** the AI tells (Pass 1).
 - **S1 to S15:** the STE80 structure rules (Pass 2).
 
-Every entry has the same fields: **Watch for**, **Problem**, **Before** and **After**. Pass 2 entries also say what changes between **80%** and **Strict**. *Weak alone* means: act only if other tells are near. The skill reports its edits by number, for example "§1, §8, S2", so you can look each one up.
+Both lists are compact tables with a short example. Pass 2 says what changes between **80%** and **Strict**. The full entries, with **Watch for**, **Problem**, **Before** and **After**, are in [references/ai-tells.md](references/ai-tells.md) and [references/ste80-rules.md](references/ste80-rules.md). *Weak alone* means: act only if other tells are near. The skill reports its edits by number, for example "§1, §8, S2", so you can look each one up.
 
 ## Installation
 

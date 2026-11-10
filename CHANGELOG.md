@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0
+
+- SKILL.md is now 217 lines instead of 573, and about 2,650 words instead of 6,250. Pass 1 and Pass 2 are compact tables with one example per group.
+- The full entries for the 26 AI tells moved to `references/ai-tells.md`. The worked example moved to `references/worked-example.md`.
+- AGENTS.md now sets a limit of 500 lines for SKILL.md.
+
 ## 3.2.1
 
 - LICENSE is now a plain MIT license. The blader/humanizer MIT notice moved to `THIRD_PARTY_NOTICES.md`.
