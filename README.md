@@ -62,7 +62,7 @@ The post then goes up a ladder: diagrams, then HTML pages, then explainer videos
 | Contractions | No | Yes, in casual text |
 | Semicolons | No | No |
 
-Karpathy talks about readability, not about sounding human. This skill adds that part, because the two methods cover each other's gaps.
+Karpathy's tip is about readability. It does not remove chatbot phrases, so Pass 1 does that first.
 
 ## How to read the skill
 

@@ -11,7 +11,7 @@ description: |
   ASD-STE100 or STE, or wants docs, READMEs, emails, posts or answers tightened.
 license: MIT
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
   author: "Dodaios"
 ---
 
@@ -37,29 +37,11 @@ Every entry has the same fields:
 - *Weak alone* means: act only when other tells are near it. One sighting is not enough.
 - In Pass 2, **80%** and **Strict** show how hard to apply the rule.
 
-The order of this file is the order of work: the method, why AI text sounds like AI, how to work, Pass 1, Pass 2, fidelity, when not to act, and one worked example.
+## The method
 
-## The method: what Karpathy said and what he meant
+Andrej Karpathy suggested asking an LLM to write "80% of the way to ASD-STE100". ASD-STE100 (Simplified Technical English, STE) is the controlled English of aircraft maintenance manuals. Its main limits: 20 words per instruction and 25 per description, one instruction per sentence, active voice, simple tenses, one meaning per word, and six sentences per paragraph at most. You already know the spec. Apply Issue 9 (2025).
 
-On 2 October 2026, Andrej Karpathy posted a list of tips for one problem: as LLMs do more of the work, people spend more time *reading and understanding* what the models produce. His first tip was about writing:
-
-> Ask your LLM to explain something in ASD-STE100, it's a controlled language specification originally developed for aerospace maintenance documentation. LLMs well-versed in this language and it comes with heavy constraints on clean writing style that I often find a lot more readable. Sometimes I've tried to soften it a bit e.g. ask for "80% of the way to ASD-STE100" because the spec is quite stringent.
-
-The same post then goes up a ladder: "But even better" are diagrams, then HTML pages, then custom explainer videos. His summary: as models take over the legwork, "a lot more of our work will rise up the abstractions into oversight and understanding." Clear output is the bottleneck. Writing is the first and cheapest step on that ladder.
-
-**What ASD-STE100 is.** Simplified Technical English (STE) is the controlled English of aircraft maintenance manuals. European and US aerospace groups built it in the 1980s for mechanics whose first language is not English. A misread step on a jet engine can kill someone. So STE has hard limits:
-
-- 20 words per instruction and 25 per description
-- one instruction per sentence
-- active voice and simple tenses only
-- one meaning per word, from a dictionary of about 900 approved words
-- one topic per paragraph, with six sentences at most
-
-The current edition is Issue 9 (2025).
-
-**Why it works on LLMs.** Karpathy names two reasons. First, the models already know the spec from their training data, so one phrase in a prompt carries many rules. Second, the constraints aim at the reader. Every rule removes a way to misread a sentence.
-
-**Why "80%".** The full spec is "quite stringent". "Check" and "test" are nouns only, so you must write "do a test of the pump". "May" and "should" are not approved. Many common words are banned. Normal prose written at 100% sounds stiff. At 80% you keep all of the structure and only as much of the vocabulary as still sounds natural:
+The full spec is too strict for normal prose. At 80%, keep all of the structure and only as much of the vocabulary as still sounds natural:
 
 | STE rule | 100% (strict) | 80% (this skill's default) |
 |---|---|---|
@@ -72,9 +54,7 @@ The current edition is Issue 9 (2025).
 | Contractions | Not allowed | Allowed in casual text |
 | Semicolons | Not allowed | Not allowed |
 
-**What he did not say.** Karpathy talks about readability, not about hiding AI or "sounding human". This skill adds that step. Removing stock AI phrases does not help much if the long, hedged, three-idea sentences stay. STE fixes those sentences. So the two methods cover each other's gaps: Pass 1 removes what sounds like a chatbot, and Pass 2 makes what is left easy to read.
-
-**A warning about the original post.** It came with an overview graphic of STE. A later fact check found errors in that graphic. For example, "approximately" is an approved word, and the dictionary has no entry for "in order to". This skill follows the rules of Issue 9, not the graphic.
+STE fixes sentence structure but not chatbot habits. So Pass 1 removes the AI tells first, and Pass 2 applies the STE structure.
 
 ## Why AI text sounds the way it does
 
@@ -591,12 +571,3 @@ python scripts/ste_check.py draft.md              # Humanize / 80%
 python scripts/ste_check.py --strict runbook.md   # Strict STE
 cat draft.txt | python scripts/ste_check.py -     # stdin
 ```
-
-## Sources and credits
-
-- Andrej Karpathy, post on X, 2 October 2026: https://x.com/karpathy/status/2105819303471976479
-- ASD-STE100 Issue 9 (2025), free from https://www.asd-ste100.org
-- Wikipedia, "Signs of AI writing" (WikiProject AI Cleanup): https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
-- Pass 1 follows the 26-pattern catalog of [blader/humanizer](https://github.com/blader/humanizer) by Siqi Chen (MIT), with new examples.
-
-This skill does not contain the ASD-STE100 specification or its dictionary. The STE rules are paraphrased and simplified. ASD-STE100 and Simplified Technical English are trademarks of ASD (AeroSpace, Security and Defence Industries Association of Europe). This project is not affiliated with or endorsed by ASD.

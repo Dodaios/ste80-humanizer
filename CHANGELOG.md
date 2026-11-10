@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.2.0
+
+- Cut SKILL.md down to what the model needs. The story of Karpathy's post, the note about the graphic and the sources moved out. They are in the README.
+- Fixed a sentence in the README that had an AI tell.
+
 ## 3.1.0
 
 - Renamed from `humanizer-ste80` to `ste80-humanizer` ("STE80 Humanizer"). Install with `npx skills add Dodaios/ste80-humanizer`. The slash command is now `/ste80-humanizer`.
