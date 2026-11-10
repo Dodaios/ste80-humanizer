@@ -221,7 +221,7 @@ What we saw: when the prompt names ASD-STE100, the base model already gets the s
 - Andrej Karpathy on X, 2 October 2026: https://x.com/karpathy/status/2105819303471976479
 - ASD-STE100 Issue 9 (2025): https://www.asd-ste100.org
 - Wikipedia, [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) (WikiProject AI Cleanup)
-- [blader/humanizer](https://github.com/blader/humanizer) by Siqi Chen (MIT). Pass 1 follows its 26-pattern catalog and order, with new examples. Its license notice is in [LICENSE](LICENSE).
+- [blader/humanizer](https://github.com/blader/humanizer) by Siqi Chen (MIT). Pass 1 follows its 26-pattern catalog and order, with new examples. Its license notice is in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 - Hacker News discussion of STE skills (July 2026): https://news.ycombinator.com/item?id=49114639
 
 ## Disclaimer

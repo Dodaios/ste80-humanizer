@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.1
+
+- LICENSE is now a plain MIT license. The blader/humanizer MIT notice moved to `THIRD_PARTY_NOTICES.md`.
+
 ## 3.2.0
 
 - Cut SKILL.md down to what the model needs. The story of Karpathy's post, the note about the graphic and the sources moved out. They are in the README.

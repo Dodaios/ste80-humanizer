@@ -6,7 +6,7 @@ This repo is one agent skill, `ste80-humanizer`. `SKILL.md` at the root is the s
 - **Keep the version in sync** in four places: `SKILL.md` (`metadata.version`), the first heading in `CHANGELOG.md`, `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`.
 - **Keep SKILL.md under about 650 lines and 7,000 words.** Every tell and rule needs its example, so it is longer than usual. Put anything else in `references/`.
 - **Keep the entry format:** Watch for, Problem, Before, After. Pass 2 entries also have Rule, 80% and Strict.
-- **Keep the blader/humanizer MIT notice in LICENSE** as long as Pass 1 follows its catalog.
+- **Keep LICENSE a plain MIT license.** Keep the blader/humanizer MIT notice in `THIRD_PARTY_NOTICES.md` as long as Pass 1 follows its catalog.
 - **Keep SKILL.md and README.md in sync** when you add, remove or rename a tell or a rule. Keep `references/ste80-rules.md` mapped to the S-rules.
 - **Keep `scripts/ste_check.py` in sync** with the tells and words in SKILL.md where a regex can find them.
 - **Do not copy the ASD-STE100 specification or dictionary.** ASD owns the copyright. Paraphrase rules in your own words. Cite only single word pairs.
