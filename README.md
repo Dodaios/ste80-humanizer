@@ -2,6 +2,8 @@
 
 [![skills.sh installs](https://skills.sh/b/Dodaios/ste80-humanizer)](https://skills.sh/Dodaios/ste80-humanizer) [![validate](https://github.com/Dodaios/ste80-humanizer/actions/workflows/validate.yml/badge.svg)](https://github.com/Dodaios/ste80-humanizer/actions/workflows/validate.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+Built by the team behind [Dodaios](https://github.com/Dodaios/Dodaios), the open-source assistant that runs your coding agents for you.
+
 STE80 Humanizer makes AI-written text read like a careful person wrote it, without changing what it says. It combines two methods:
 
 1. **The humanizer method.** Remove the 26 tells from Wikipedia's [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), in the catalog of [blader/humanizer](https://github.com/blader/humanizer).
