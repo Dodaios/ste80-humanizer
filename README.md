@@ -7,7 +7,7 @@ Built by the team behind [Dodaios](https://github.com/Dodaios/Dodaios), the open
 STE80 Humanizer makes AI-written text read like a careful person wrote it, without changing what it says. It combines two methods:
 
 1. **The humanizer method.** Remove the 26 tells from Wikipedia's [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), in the catalog of [blader/humanizer](https://github.com/blader/humanizer).
-2. **Karpathy's STE80 method.** Rebuild the sentences "80% of the way to ASD-STE100", the controlled English of aircraft maintenance manuals.
+2. **Karpathy's STE80 method.** Rebuild the sentences to be "80% of the way to ASD-STE100", the controlled English of aircraft maintenance manuals.
 
 **Before:**
 > Great question! Kubernetes liveness probes are a powerful mechanism that enables the kubelet to determine whether a container is healthy — and it's not just a health check, it's your first line of defense. When a probe fails, the container will be automatically restarted by the kubelet, ensuring that your application remains available. However, it's important to note that misconfigured probes could potentially cause cascading restarts, so parameters like `initialDelaySeconds` and `failureThreshold` should be carefully tuned.
