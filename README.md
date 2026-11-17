@@ -51,7 +51,7 @@ The post then goes up a ladder: diagrams, then HTML pages, then explainer videos
 - one meaning per word, with about 900 approved words
 - one topic per paragraph, and six sentences at most
 
-**Why "80%"?** At 100%, "check" and "test" are nouns only, "may" and "should" are banned and many common words are not allowed. Normal prose sounds stiff. At 80%, you keep the full structure and only as much vocabulary as still sounds natural:
+**Why "80%"?** At 100%, "check" and "test" are nouns only. "May" and "should" are banned, and many common words are not allowed. Normal prose sounds stiff. At 80%, you keep the full structure and only as much vocabulary as still sounds natural:
 
 | STE rule | 100% (Strict mode) | 80% (default) |
 |---|---|---|
