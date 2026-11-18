@@ -2,6 +2,8 @@
 
 [![skills.sh installs](https://skills.sh/b/Dodaios/ste80-humanizer)](https://skills.sh/Dodaios/ste80-humanizer) [![validate](https://github.com/Dodaios/ste80-humanizer/actions/workflows/validate.yml/badge.svg)](https://github.com/Dodaios/ste80-humanizer/actions/workflows/validate.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+<a href="https://trendshift.io/repositories/346973?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-346973" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/346973/daily?language=Python" alt="Dodaios%2Fste80-humanizer | Trendshift" width="250" height="55"/></a>
+
 Built by the team behind [Dodaios](https://github.com/Dodaios/Dodaios), the open-source assistant that runs your coding agents for you.
 
 STE80 Humanizer makes AI-written text read like a careful person wrote it, without changing what it says. It combines two methods:
