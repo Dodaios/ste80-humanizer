@@ -203,7 +203,22 @@ More examples: [references/ste80-rules.md](references/ste80-rules.md). Full stri
 ```bash
 python scripts/ste_check.py README.md
 python scripts/ste_check.py --strict docs/runbook.md
+python scripts/ste_check.py --ignore passive,word docs/guide.md
+python scripts/ste_check.py --select not-x-but-y,chatbot docs/guide.md
+python scripts/ste_check.py --baseline 5 docs/guide.md
+python scripts/ste_check.py --list-rules
 cat draft.txt | python scripts/ste_check.py -
+```
+
+To silence findings on an intentional quote or example, add an HTML comment:
+
+```markdown
+<!-- ste-check-disable-next-line passive -->
+The token is validated by the gateway.
+
+<!-- ste-check-disable -->
+Quoted text that you do not want to edit.
+<!-- ste-check-enable -->
 ```
 
 It is a heuristic, not an AI detector and not a compliance checker.
