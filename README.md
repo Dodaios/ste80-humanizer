@@ -203,8 +203,11 @@ More examples: [references/ste80-rules.md](references/ste80-rules.md). Full stri
 ```bash
 python scripts/ste_check.py README.md
 python scripts/ste_check.py --strict docs/runbook.md
+python scripts/ste_check.py --compare draft.md rewritten.md
 cat draft.txt | python scripts/ste_check.py -
 ```
+
+Use `--compare` to check that a rewrite keeps numbers, code spans, URLs, quotes and uncertainty from the original text.
 
 It is a heuristic, not an AI detector and not a compliance checker.
 
