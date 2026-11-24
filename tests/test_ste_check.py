@@ -1,4 +1,4 @@
-"""Tests for scripts/ste_check.py rule filtering, baseline, and inline directives."""
+"""Tests for scripts/ste_check.py rule filtering, --max-findings, and inline directives."""
 
 from __future__ import annotations
 
@@ -89,6 +89,18 @@ class TestSteCheckFilteringAndDirectives(unittest.TestCase):
         findings = ste_check.check(text, False)
         self.assertEqual([(f.line, f.rule) for f in findings], [(4, "word"), (6, "word")])
 
+    def test_unknown_rule_in_directive_is_reported(self) -> None:
+        text = (
+            "<!-- ste-check-disable -->\n"
+            "The token is validated by the gateway.\n"
+            "<!-- ste-check-enable passiv -->\n"
+            "The token is validated by the gateway.\n"
+        )
+        findings = ste_check.check(text, False)
+        self.assertEqual([(f.line, f.rule) for f in findings], [(3, "directive")])
+        self.assertIn("passiv", findings[0].message)
+        self.assertEqual(ste_check.check(text, False, ignore={"directive"}), [])
+
     def test_directive_comment_itself_does_not_trigger_dash_or_words(self) -> None:
         text = (
             "<!-- ste-check-disable-next-line passive -->\n"
@@ -112,7 +124,7 @@ class TestSteCheckFilteringAndDirectives(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertEqual(set(json.loads(buf_json.getvalue())), set(ste_check.ALL_RULES))
 
-    def test_cli_baseline_and_select_ignore(self) -> None:
+    def test_cli_max_findings_and_select_ignore(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             sample = Path(tmp) / "doc.md"
             sample.write_text("This seamless tool is validated by the gateway.\n", encoding="utf-8")
@@ -124,8 +136,8 @@ class TestSteCheckFilteringAndDirectives(unittest.TestCase):
 
             buf = io.StringIO()
             with contextlib.redirect_stdout(buf):
-                rc_base = ste_check.main(["--baseline", "2", str(sample)])
-            self.assertEqual(rc_base, 0)
+                rc_max = ste_check.main(["--max-findings", "2", str(sample)])
+            self.assertEqual(rc_max, 0)
 
             buf = io.StringIO()
             with contextlib.redirect_stdout(buf):
@@ -141,7 +153,7 @@ class TestSteCheckFilteringAndDirectives(unittest.TestCase):
         for bad_argv in (
             ["--ignore", "not-a-real-rule", "-"],
             ["--select", "bogus", "-"],
-            ["--baseline", "-1", "-"],
+            ["--max-findings", "-1", "-"],
             [],
         ):
             with self.assertRaises(SystemExit) as ctx:

@@ -11,7 +11,7 @@ description: |
   ASD-STE100 or STE, or wants docs, READMEs, emails, posts or answers tightened.
 license: MIT
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
   author: "Dodaios"
 ---
 

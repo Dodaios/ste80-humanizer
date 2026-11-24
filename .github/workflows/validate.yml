@@ -26,6 +26,9 @@ jobs:
           echo "The gateway examines the token." > good.txt
           python scripts/ste_check.py good.txt
 
+      - name: Unit tests for the checker
+        run: python -m unittest discover -s tests -v
+
       - name: Version is the same everywhere
         run: |
           v_skill=$(grep -E '^\s+version:' SKILL.md | head -1 | sed -E 's/.*"(.*)".*/\1/')

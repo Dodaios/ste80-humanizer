@@ -10,7 +10,7 @@ Usage:
     python ste_check.py --strict FILE
     python ste_check.py --ignore passive,word FILE
     python ste_check.py --select not-x-but-y,chatbot FILE
-    python ste_check.py --baseline 5 FILE
+    python ste_check.py --max-findings 5 FILE
     python ste_check.py --list-rules
     cat draft.txt | python ste_check.py -
     python ste_check.py --json FILE
@@ -22,7 +22,9 @@ Inline suppression comments (ignored inside code blocks and inline code):
     <!-- ste-check-enable passive -->
     <!-- ste-check-disable-next-line passive -->
 
-Exit code: 0 if findings <= baseline, 1 if findings > baseline, 2 on usage error.
+An unknown rule name in a comment gives a 'directive' finding.
+
+Exit code: 0 if findings <= --max-findings (default 0), 1 if more, 2 on usage error.
 """
 
 from __future__ import annotations
@@ -100,6 +102,7 @@ BUILTIN_RULES = frozenset({
     "contraction",
     "curly-quotes",
     "dash",
+    "directive",
     "ing-form",
     "modal-passive",
     "noun-only",
@@ -171,13 +174,14 @@ def _parse_directive_rules(raw: str | None) -> set[str]:
     return {tok.strip().lower() for tok in re.split(r"[\s,]+", raw.strip()) if tok.strip()}
 
 
-def parse_suppressions(text: str) -> dict[int, set[str] | None]:
-    """Return {line_no: None (all rules) or set[str] (named rules)} from inline directives.
+def parse_suppressions(text: str) -> tuple[dict[int, set[str] | None], list[tuple[int, str]]]:
+    """Return ({line_no: None (all rules) or set[str] (named rules)}, [(line_no, unknown_rule)]).
 
     Directives inside YAML front matter, fenced code blocks, indented code blocks,
     or inline backtick spans are ignored.
     """
     suppressed: dict[int, set[str] | None] = {}
+    unknown: list[tuple[int, str]] = []
     in_code = False
     in_front = False
     block_all = False
@@ -216,6 +220,7 @@ def parse_suppressions(text: str) -> dict[int, set[str] | None]:
         for m in matches:
             action = m.group(1).lower()
             rules = _parse_directive_rules(m.group(2))
+            unknown.extend((i, name) for name in sorted(rules - ALL_RULES))
             if action == "disable":
                 if not rules:
                     block_all = True
@@ -244,7 +249,7 @@ def parse_suppressions(text: str) -> dict[int, set[str] | None]:
             if combined:
                 suppressed[i] = set(combined)
 
-    return suppressed
+    return suppressed, unknown
 
 
 def _is_suppressed(suppressions: dict[int, set[str] | None], line_no: int, rule: str) -> bool:
@@ -335,7 +340,7 @@ def check(
     ignore: set[str] | None = None,
 ) -> list[Finding]:
     f: list[Finding] = []
-    suppressions = parse_suppressions(text)
+    suppressions, unknown_directive_rules = parse_suppressions(text)
     lines = strip_markdown(text)
     raw_by_no = dict(enumerate(text.splitlines(), 1))
 
@@ -403,6 +408,11 @@ def check(
             continue
         filtered.append(item)
 
+    # A typo in a comment must not stay silent, so inline comments cannot hide these findings.
+    if (select is None or "directive" in select) and (ignore is None or "directive" not in ignore):
+        for no, name in unknown_directive_rules:
+            filtered.append(Finding(no, "directive", f"unknown rule '{name}' in ste-check comment (see --list-rules)", name))
+
     filtered.sort(key=lambda x: (x.line, x.rule))
     return filtered
 
@@ -439,7 +449,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--json", action="store_true", help="output JSON")
     ap.add_argument("--select", action="append", default=[], metavar="RULES", help="comma-separated rule names to run (repeatable)")
     ap.add_argument("--ignore", action="append", default=[], metavar="RULES", help="comma-separated rule names to skip (repeatable)")
-    ap.add_argument("--baseline", type=int, default=0, metavar="N", help="exit 0 unless total findings exceed N (default 0)")
+    ap.add_argument("--max-findings", type=int, default=0, metavar="N", help="exit 0 unless total findings exceed N (default 0)")
     ap.add_argument("--list-rules", action="store_true", help="print all supported rule names and exit")
     args = ap.parse_args(argv)
 
@@ -452,8 +462,8 @@ def main(argv: list[str]) -> int:
                 print(name)
         return 0
 
-    if args.baseline < 0:
-        ap.error("--baseline must be a non-negative integer")
+    if args.max_findings < 0:
+        ap.error("--max-findings must be a non-negative integer")
 
     if not args.files:
         ap.error("the following arguments are required: files")
@@ -481,7 +491,7 @@ def main(argv: list[str]) -> int:
             print(f"  {x.line:>4}  {x.rule:<16} {x.message}")
     if args.json:
         print(json.dumps(report, indent=2))
-    return 1 if total > args.baseline else 0
+    return 1 if total > args.max_findings else 0
 
 
 if __name__ == "__main__":
