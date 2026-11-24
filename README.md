@@ -203,15 +203,34 @@ More examples: [references/ste80-rules.md](references/ste80-rules.md). Full stri
 ```bash
 python scripts/ste_check.py README.md
 python scripts/ste_check.py --strict docs/runbook.md
+python scripts/ste_check.py --ignore passive,word docs/guide.md
+python scripts/ste_check.py --select not-x-but-y,chatbot docs/guide.md
+python scripts/ste_check.py --max-findings 5 docs/guide.md
+python scripts/ste_check.py --list-rules
 python scripts/ste_check.py --compare draft.md rewritten.md
 cat draft.txt | python scripts/ste_check.py -
 ```
 
-Use `--compare` to check that a rewrite keeps numbers, code spans, URLs, quotes and uncertainty from the original text.
+`--select` runs only the named rules. `--ignore` skips them. `--list-rules` shows all rule names. `--max-findings N` exits with 0 if there are N findings or fewer. Use it to adopt the checker on old docs in CI and lower N over time.
+
+`--compare ORIGINAL REWRITE` checks the fidelity of a rewrite. It lists numbers, inline code, CLI flags, code blocks, URLs, quoted text and hedges such as "might" that are in the original but not in the rewrite. It does not check meaning, so read the rewrite too.
+
+To silence findings on an intentional quote or example, add an HTML comment. Without rule names, the comment silences all rules. The checker ignores these comments in code blocks and inline code. An unknown rule name in a comment gives a `directive` finding.
+
+```markdown
+<!-- ste-check-disable-next-line passive -->
+The token is validated by the gateway.
+
+<!-- ste-check-disable -->
+Quoted text that you do not want to edit.
+<!-- ste-check-enable -->
+```
 
 It is a heuristic, not an AI detector and not a compliance checker.
 
 ## Tests
+
+`tests/` has unit tests for the checker. Run them with `python -m unittest discover -s tests`.
 
 `evals/` has four cases in the `claude plugin eval` format: a README rewrite, an explanation from scratch, a strict runbook and a casual LinkedIn post that does not mention STE. Run them with `claude plugin eval . --allow-tools Write,Edit,Bash`.
 
