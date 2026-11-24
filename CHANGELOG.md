@@ -4,6 +4,7 @@
 
 - `ste_check.py` has new flags: `--select` and `--ignore` run or skip named rules, `--list-rules` shows all rule names, and `--max-findings N` lets a run with N findings or fewer pass. Contributed by @mvanhorn in #5.
 - `ste_check.py` reads inline comments: `<!-- ste-check-disable -->`, `<!-- ste-check-enable -->` and `<!-- ste-check-disable-next-line -->`, each with optional rule names. An unknown rule name gives a `directive` finding.
+- `ste_check.py --compare ORIGINAL REWRITE` lists numbers, code, CLI flags, URLs, quotes and hedges that a rewrite lost. Contributed by @mvanhorn in #6.
 - New unit tests in `tests/`. CI runs them.
 
 ## 4.0.0

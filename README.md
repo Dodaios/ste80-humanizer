@@ -207,10 +207,13 @@ python scripts/ste_check.py --ignore passive,word docs/guide.md
 python scripts/ste_check.py --select not-x-but-y,chatbot docs/guide.md
 python scripts/ste_check.py --max-findings 5 docs/guide.md
 python scripts/ste_check.py --list-rules
+python scripts/ste_check.py --compare draft.md rewritten.md
 cat draft.txt | python scripts/ste_check.py -
 ```
 
 `--select` runs only the named rules. `--ignore` skips them. `--list-rules` shows all rule names. `--max-findings N` exits with 0 if there are N findings or fewer. Use it to adopt the checker on old docs in CI and lower N over time.
+
+`--compare ORIGINAL REWRITE` checks the fidelity of a rewrite. It lists numbers, inline code, CLI flags, code blocks, URLs, quoted text and hedges such as "might" that are in the original but not in the rewrite. It does not check meaning, so read the rewrite too.
 
 To silence findings on an intentional quote or example, add an HTML comment. Without rule names, the comment silences all rules. The checker ignores these comments in code blocks and inline code. An unknown rule name in a comment gives a `directive` finding.
 
