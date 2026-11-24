@@ -8,10 +8,23 @@ No dependencies. Python 3.8+.
 Usage:
     python ste_check.py FILE [FILE ...]
     python ste_check.py --strict FILE
+    python ste_check.py --ignore passive,word FILE
+    python ste_check.py --select not-x-but-y,chatbot FILE
+    python ste_check.py --max-findings 5 FILE
+    python ste_check.py --list-rules
     cat draft.txt | python ste_check.py -
     python ste_check.py --json FILE
 
-Exit code: 0 if no findings, 1 if findings, 2 on usage error.
+Inline suppression comments (ignored inside code blocks and inline code):
+    <!-- ste-check-disable -->
+    <!-- ste-check-disable passive word -->
+    <!-- ste-check-enable -->
+    <!-- ste-check-enable passive -->
+    <!-- ste-check-disable-next-line passive -->
+
+An unknown rule name in a comment gives a 'directive' finding.
+
+Exit code: 0 if findings <= --max-findings (default 0), 1 if more, 2 on usage error.
 """
 
 from __future__ import annotations
@@ -85,6 +98,31 @@ TELLS = [
     (r"^(?:that'?s|this is) (?:the real|why it|what) ", "closer", "possible one-line closer: cut it if it repeats the point"),
 ]
 
+BUILTIN_RULES = frozenset({
+    "contraction",
+    "curly-quotes",
+    "dash",
+    "directive",
+    "ing-form",
+    "modal-passive",
+    "noun-only",
+    "paragraph-length",
+    "passive",
+    "perfect-tense",
+    "phrasal-verb",
+    "progressive",
+    "semicolon",
+    "sentence-length",
+    "word",
+})
+
+ALL_RULES = frozenset(BUILTIN_RULES | {rule for _, rule, _ in TELLS})
+
+DIRECTIVE_RE = re.compile(
+    r"<!--\s*ste-check-(disable-next-line|disable|enable)(?:\s+([^>]*?))?\s*-->",
+    re.I,
+)
+
 PHRASAL = [
     "set up", "find out", "look into", "look at", "fill in", "fill out",
     "turn on", "turn off", "switch on", "switch off", "go through",
@@ -130,6 +168,97 @@ class Finding:
     excerpt: str
 
 
+def _parse_directive_rules(raw: str | None) -> set[str]:
+    if not raw or not raw.strip():
+        return set()
+    return {tok.strip().lower() for tok in re.split(r"[\s,]+", raw.strip()) if tok.strip()}
+
+
+def parse_suppressions(text: str) -> tuple[dict[int, set[str] | None], list[tuple[int, str]]]:
+    """Return ({line_no: None (all rules) or set[str] (named rules)}, [(line_no, unknown_rule)]).
+
+    Directives inside YAML front matter, fenced code blocks, indented code blocks,
+    or inline backtick spans are ignored.
+    """
+    suppressed: dict[int, set[str] | None] = {}
+    unknown: list[tuple[int, str]] = []
+    in_code = False
+    in_front = False
+    block_all = False
+    block_rules: set[str] = set()
+    next_line_all = False
+    next_line_rules: set[str] = set()
+
+    for i, raw in enumerate(text.splitlines(), 1):
+        line = raw.rstrip()
+        if i == 1 and line.strip() == "---":
+            in_front = True
+            continue
+        if in_front:
+            if line.strip() == "---":
+                in_front = False
+            continue
+        if line.lstrip().startswith(("```", "~~~")):
+            in_code = not in_code
+            next_line_all = False
+            next_line_rules.clear()
+            continue
+        if in_code or line.startswith("    "):
+            next_line_all = False
+            next_line_rules.clear()
+            continue
+
+        # Capture any pending next-line suppression for this line before updating it.
+        cur_next_all = next_line_all
+        cur_next_rules = set(next_line_rules)
+        next_line_all = False
+        next_line_rules.clear()
+
+        # Ignore directives written inside inline code spans.
+        scannable = re.sub(r"`[^`]*`", "", line)
+        matches = list(DIRECTIVE_RE.finditer(scannable))
+        for m in matches:
+            action = m.group(1).lower()
+            rules = _parse_directive_rules(m.group(2))
+            unknown.extend((i, name) for name in sorted(rules - ALL_RULES))
+            if action == "disable":
+                if not rules:
+                    block_all = True
+                else:
+                    block_rules.update(rules)
+            elif action == "enable":
+                if not rules:
+                    block_all = False
+                    block_rules.clear()
+                else:
+                    if block_all:
+                        block_all = False
+                        block_rules = set(ALL_RULES) - rules
+                    else:
+                        block_rules.difference_update(rules)
+            elif action == "disable-next-line":
+                if not rules:
+                    next_line_all = True
+                else:
+                    next_line_rules.update(rules)
+
+        if block_all or cur_next_all:
+            suppressed[i] = None
+        else:
+            combined = block_rules | cur_next_rules
+            if combined:
+                suppressed[i] = set(combined)
+
+    return suppressed, unknown
+
+
+def _is_suppressed(suppressions: dict[int, set[str] | None], line_no: int, rule: str) -> bool:
+    if line_no not in suppressions:
+        return False
+    entry = suppressions[line_no]
+    return entry is None or rule in entry
+
+
 def strip_markdown(text: str) -> list[tuple[int, str]]:
     """Return (line_no, line) for prose lines. Drop code blocks, tables, front matter."""
     out = []
@@ -151,6 +280,7 @@ def strip_markdown(text: str) -> list[tuple[int, str]]:
             out.append((i, ""))
             continue
         line = re.sub(r"`[^`]*`", "CODE", line)            # inline code = 1 word
+        line = DIRECTIVE_RE.sub("", line)                  # inline ste-check directives
         line = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", line)  # links
         line = re.sub(r"https?://\S+", "URL", line)
         if re.match(r"^\s*(?:[-*+]|\d+[.)])\s+", line):
@@ -203,8 +333,14 @@ def is_imperative(sentence: str) -> bool:
     }
 
 
-def check(text: str, strict: bool) -> list[Finding]:
+def check(
+    text: str,
+    strict: bool,
+    select: set[str] | None = None,
+    ignore: set[str] | None = None,
+) -> list[Finding]:
     f: list[Finding] = []
+    suppressions, unknown_directive_rules = parse_suppressions(text)
     lines = strip_markdown(text)
     raw_by_no = dict(enumerate(text.splitlines(), 1))
 
@@ -261,8 +397,24 @@ def check(text: str, strict: bool) -> list[Finding]:
         for word, alt in swaps.items():
             if re.search(rf"(?<![\w-]){re.escape(word)}(?![\w-])", low):
                 f.append(Finding(no, "word", f"'{word}' -> {alt}", line.strip()[:100]))
-    f.sort(key=lambda x: (x.line, x.rule))
-    return f
+
+    filtered: list[Finding] = []
+    for item in f:
+        if select is not None and item.rule not in select:
+            continue
+        if ignore is not None and item.rule in ignore:
+            continue
+        if _is_suppressed(suppressions, item.line, item.rule):
+            continue
+        filtered.append(item)
+
+    # A typo in a comment must not stay silent, so inline comments cannot hide these findings.
+    if (select is None or "directive" in select) and (ignore is None or "directive" not in ignore):
+        for no, name in unknown_directive_rules:
+            filtered.append(Finding(no, "directive", f"unknown rule '{name}' in ste-check comment (see --list-rules)", name))
+
+    filtered.sort(key=lambda x: (x.line, x.rule))
+    return filtered
 
 
 def summary(text: str) -> dict:
@@ -277,12 +429,47 @@ def summary(text: str) -> dict:
     }
 
 
+def _parse_cli_rules(values: list[str], flag_name: str, ap: argparse.ArgumentParser) -> set[str]:
+    rules: set[str] = set()
+    for chunk in values:
+        for item in chunk.split(","):
+            name = item.strip().lower()
+            if name:
+                rules.add(name)
+    unknown = sorted(rules - ALL_RULES)
+    if unknown:
+        ap.error(f"unknown rule(s) in {flag_name}: {', '.join(unknown)} (run --list-rules to see valid names)")
+    return rules
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="Heuristic linter for AI tells and STE-style English (not a compliance checker, not an AI detector).")
-    ap.add_argument("files", nargs="+", help="files to check, or - for stdin")
+    ap.add_argument("files", nargs="*", help="files to check, or - for stdin")
     ap.add_argument("--strict", action="store_true", help="strict mode: exact limits, more word rules")
     ap.add_argument("--json", action="store_true", help="output JSON")
+    ap.add_argument("--select", action="append", default=[], metavar="RULES", help="comma-separated rule names to run (repeatable)")
+    ap.add_argument("--ignore", action="append", default=[], metavar="RULES", help="comma-separated rule names to skip (repeatable)")
+    ap.add_argument("--max-findings", type=int, default=0, metavar="N", help="exit 0 unless total findings exceed N (default 0)")
+    ap.add_argument("--list-rules", action="store_true", help="print all supported rule names and exit")
     args = ap.parse_args(argv)
+
+    if args.list_rules:
+        names = sorted(ALL_RULES)
+        if args.json:
+            print(json.dumps(names, indent=2))
+        else:
+            for name in names:
+                print(name)
+        return 0
+
+    if args.max_findings < 0:
+        ap.error("--max-findings must be a non-negative integer")
+
+    if not args.files:
+        ap.error("the following arguments are required: files")
+
+    select = _parse_cli_rules(args.select, "--select", ap) if args.select else None
+    ignore = _parse_cli_rules(args.ignore, "--ignore", ap) if args.ignore else None
 
     total = 0
     report = []
@@ -292,7 +479,7 @@ def main(argv: list[str]) -> int:
         else:
             with open(path, encoding="utf-8") as fh:
                 text = fh.read()
-        findings = check(text, args.strict)
+        findings = check(text, args.strict, select=select, ignore=ignore)
         total += len(findings)
         stats = summary(text)
         if args.json:
@@ -304,7 +491,7 @@ def main(argv: list[str]) -> int:
             print(f"  {x.line:>4}  {x.rule:<16} {x.message}")
     if args.json:
         print(json.dumps(report, indent=2))
-    return 1 if total else 0
+    return 1 if total > args.max_findings else 0
 
 
 if __name__ == "__main__":
