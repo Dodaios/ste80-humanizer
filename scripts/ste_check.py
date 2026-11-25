@@ -170,7 +170,7 @@ PERFECT_RE = re.compile(r"\b(?:has|have|had)\s+(?:not\s+)?(?:been|\w+ed|\w+en|do
 PROGRESSIVE_RE = re.compile(rf"\b{AUX}\s+(?:not\s+)?(\w+ing)\b", re.I)
 MODAL_PASSIVE_RE = re.compile(r"\b(?:can|could|may|might|must|should|shall|will|would)\s+(?:not\s+)?be\s+\w+(?:ed|en)\b", re.I)
 CONTRACTION_RE = re.compile(r"\b\w+(?:n't|'re|'ve|'ll|'d|'m)\b|\b(?:it|that|there|what|here)'s\b", re.I)
-WORD_RE = re.compile(r"[A-Za-z][A-Za-z'\-]*|\d[\w.,:/%-]*")
+WORD_RE = re.compile(r"[^\W\d_](?:[^\W\d_]|['\-])*|\d[\w.,:/%-]*")
 
 INLINE_CODE_RE = re.compile(r"`([^`\n]+)`")
 MD_LINK_RE = re.compile(r"\[[^\[\]]*\]\(([^)\s\[]+)(?:\s[^)\[]*)?\)")
