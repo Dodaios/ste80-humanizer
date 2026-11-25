@@ -340,7 +340,7 @@ def paragraphs(lines: list[tuple[int, str]]) -> list[tuple[int, str]]:
 
 
 def sentences(paragraph: str) -> list[str]:
-    protected = re.sub(r"\b(e\.g|i\.e|etc|vs|Dr|Mr|Ms|No)\.", lambda m: m.group(0).replace(".", "§"), paragraph)
+    protected = re.sub(r"\b(?:e\.g|i\.e|etc|vs|Dr|Mr|Ms)\.|\bNo\.(?=\s*\d)", lambda m: m.group(0).replace(".", "§"), paragraph)
     parts = re.split(r"(?<=[.!?:])\s+(?=[A-Z0-9\"'(])", protected)
     return [p.replace("§", ".").strip() for p in parts if p.strip()]
 
