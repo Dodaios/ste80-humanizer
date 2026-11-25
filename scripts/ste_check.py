@@ -346,7 +346,7 @@ def sentences(paragraph: str) -> list[str]:
 
 def count_words(sentence: str) -> int:
     s = re.sub(r"\([^()]*\)", " PAREN ", sentence)         # parentheses = 1 word
-    s = re.sub(r"\"[^\"]*\"|“[^”]*”", " QUOTE ", s)        # quoted text = 1 word
+    s = re.sub(r"\"[^\"]*\"|“[^“”]*”", " QUOTE ", s)        # quoted text = 1 word
     s = re.sub(r"\b(\d[\d.,]{0,30})\s*(%|ms|s|kb|mb|gb|tb|px|kg|g|m|cm|mm|km|h|min)\b", r"\1", s, flags=re.I)
     return len(WORD_RE.findall(s))
 
