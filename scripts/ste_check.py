@@ -309,6 +309,7 @@ def strip_markdown(text: str) -> list[tuple[int, str]]:
         if in_code or line.lstrip().startswith("|") or line.startswith("    "):
             out.append((i, ""))
             continue
+        line = re.sub(r"’", "'", line)                     # curly apostrophe = straight one
         line = re.sub(r"`[^`]*`", "CODE", line)            # inline code = 1 word
         line = DIRECTIVE_RE.sub("", line)                  # inline ste-check directives
         line = re.sub(r"\[([^\[\]]*)\]\([^)\[]*\)", r"\1", line)  # links
