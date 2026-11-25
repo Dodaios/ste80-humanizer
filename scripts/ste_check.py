@@ -311,7 +311,7 @@ def strip_markdown(text: str) -> list[tuple[int, str]]:
             continue
         line = re.sub(r"`[^`]*`", "CODE", line)            # inline code = 1 word
         line = DIRECTIVE_RE.sub("", line)                  # inline ste-check directives
-        line = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", line)  # links
+        line = re.sub(r"\[([^\[\]]*)\]\([^)\[]*\)", r"\1", line)  # links
         line = re.sub(r"https?://\S+", "URL", line)
         if re.match(r"^\s*(?:[-*+]|\d+[.)])\s+", line):
             out.append((i, ""))                               # each list item = own paragraph
