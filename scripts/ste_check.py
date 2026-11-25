@@ -132,7 +132,7 @@ FIDELITY_RULES = frozenset({
 ALL_RULES = frozenset(BUILTIN_RULES | FIDELITY_RULES | {rule for _, rule, _ in TELLS})
 
 DIRECTIVE_RE = re.compile(
-    r"<!--\s*ste-check-(disable-next-line|disable|enable)(?:\s+([^>]*?))?\s*-->",
+    r"<!--\s*ste-check-(disable-next-line|disable|enable)(?=\s|-->)([^<>]{0,500}?)-->",
     re.I,
 )
 
