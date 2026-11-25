@@ -176,7 +176,7 @@ INLINE_CODE_RE = re.compile(r"`([^`\n]+)`")
 MD_LINK_RE = re.compile(r"\[[^\[\]]*\]\(([^)\s\[]+)(?:\s[^)\[]*)?\)")
 BARE_URL_RE = re.compile(r"https?://[^\s)>\]\"']+")
 # A number with an optional unit or suffix: 40+, 99.9%, 4.0.0, v2, 30s, 100ms, 8GB, 2x.
-NUMBER_TOKEN_RE = re.compile(r"(?<![A-Za-z0-9_])v?\d+(?:[.,]\d+)*(?:\+|%|[A-Za-z]{1,5})?(?![A-Za-z0-9_])", re.I)
+NUMBER_TOKEN_RE = re.compile(r"(?<![A-Za-z0-9_])v?\d+(?:[.,]\d+)*(?:\+|%|[A-Za-z]+)?(?![A-Za-z0-9_])", re.I)
 CLI_FLAG_RE = re.compile(r"(?<![\w-])--[A-Za-z][\w-]*")
 QUOTE_SPAN_RE = re.compile(r"\"([^\"\n]{4,})\"|“([^“”\n]{4,})”")
 HEDGE_SOURCE_RE = re.compile(
